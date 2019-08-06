@@ -3,8 +3,12 @@ package transaction
 import (
 	"bytes"
 
-	"github.com/LazyboyChen7/project/utils"
+	//"github.com/LazyboyChen7/project/utils"
+	"fmt"
+	"test/project/utils"
 )
+
+var Nowpool *TxPool
 
 type Transaction struct {
 	// CreateInstance []byte // 物品初始归属
@@ -52,4 +56,21 @@ func Txhash(d, f, t string) string {
 	bf.WriteString(t)
 	bt := bf.Bytes()
 	return utils.Hash(bt)
+}
+
+//将用户的send请求打包成交易,并放进交易池
+func Send(vin string, vout string, data string) {
+
+	tx := CreateTx(data, vin, vout) //打包成交易
+	//var newpool := NewTxPool()
+	Nowpool.PutTx(&tx) //将交易放进现在的交易池里
+
+}
+
+//列出交易池的交易
+func ListTxPool(updatepool *TxPool) {
+	for _, v := range updatepool.Tx {
+		fmt.Print(v)
+	}
+
 }
